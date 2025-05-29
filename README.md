@@ -1,5 +1,5 @@
 # [EVEmu](https://evemu.dev) - An EVE Online Emulator
-
+-- Anomalys are now working and displaying, set in config also max 10 anom per system
 <p align="center">
 	<a href="https://github.com/EvEmu-Project/evemu_Crucible/pulse"><img src="https://img.shields.io/tokei/lines/github/EvEmu-Project/evemu_Crucible" /></a>
 	<a href="https://www.codefactor.io/repository/github/evemu-project/evemu_crucible"><img src="https://img.shields.io/codefactor/grade/github/evemu-project/evemu_crucible" /></a>
