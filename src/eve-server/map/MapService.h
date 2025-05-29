@@ -61,6 +61,7 @@ protected:
     PyResult GetIncursionGlobalReport(PyCallArgs& call);
     PyResult GetVictoryPoints(PyCallArgs& call);
     PyResult GetStuckSystems(PyCallArgs& call);
+    PyResult GetSystemAnomalies(PyCallArgs& call);
 
 };
 
