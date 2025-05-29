@@ -733,6 +733,7 @@ bool EVEServerConfig::ProcessExploring ( const TiXmlElement* ele ) {
     AddValueParser( "Complex",              exploring.Complex );
     AddValueParser( "Gravametric",          exploring.Gravametric );
     AddValueParser( "Magnetometric",        exploring.Magnetometric );
+    AddValueParser( "maxAnomalies",         exploring.maxAnomalies );
 
     const bool result = ParseElementChildren( ele );
 
@@ -742,6 +743,7 @@ bool EVEServerConfig::ProcessExploring ( const TiXmlElement* ele ) {
     RemoveParser( "Complex" );
     RemoveParser( "Gravametric" );
     RemoveParser( "Magnetometric" );
+    RemoveParser( "maxAnomalies" );
 
     return result;
 }
