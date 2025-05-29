@@ -221,6 +221,7 @@ boolean can use either 0/1 OR true/false.
         <Radar>6</Radar><!-- integer  -1 to disable.  max 128.  default 6 -->
         <Unrated>8</Unrated><!-- integer  -1 to disable.  max 128.  default 8 -->
         <Complex>4</Complex><!-- integer  -1 to disable.  max 128.  default 4 -->
+        <maxAnomalies>10</maxAnomalies>
     </exploring>
 
     <testing><!-- switches for various incomplete/testing code sections -->
