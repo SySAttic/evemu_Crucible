@@ -67,7 +67,8 @@ private:
     SpawnMgr* m_spawnMgr;
     SystemManager* m_system;
     EVEServiceManager& m_services;
-
+    uint8 m_maxAnoms;
+    std::map<uint32, CosmicSignature> m_anomByItemID;
     Timer m_spawnTimer;
     Timer m_procTimer;
 
