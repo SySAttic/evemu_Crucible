@@ -1,4 +1,8 @@
 # [EVEmu](https://evemu.dev) - An EVE Online Emulator
+------ Anomaly manager/ spawns max 10 anoms per system will spawn the correct anoms in the righ tregions angel/guristas etc etc..
+
+------ Now theres no need for scanners :)
+
 
 <p align="center">
 	<a href="https://github.com/EvEmu-Project/evemu_Crucible/pulse"><img src="https://img.shields.io/tokei/lines/github/EvEmu-Project/evemu_Crucible" /></a>
