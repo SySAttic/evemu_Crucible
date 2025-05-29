@@ -2211,3 +2211,16 @@ void StaticDataMgr::AddOutpost(StationData &stData)
         m_stationSystem.emplace(stData.stationID, stData.systemID);
     }
 }
+
+std::vector<uint8> StaticDataMgr::GetAnomalyTypesForFaction(uint32 factionID)
+{
+    // Example: hardcoded demo mapping. Replace with DB/config if you wish.
+    // Map: factionID -> anomaly type IDs
+    // E.g. 500002 = Guristas, 500003 = Angels, etc.
+    if (factionID == 500002) // Guristas
+        return {Dungeon::Type::Anomaly, Dungeon::Type::Gravimetric};
+    if (factionID == 500003) // Angels
+        return {Dungeon::Type::Anomaly, Dungeon::Type::Ladar};
+    // Add more as needed
+    return {Dungeon::Type::Anomaly};
+}
