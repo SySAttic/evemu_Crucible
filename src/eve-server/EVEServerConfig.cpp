@@ -269,6 +269,15 @@ EVEServerConfig::EVEServerConfig()
     threads.NetworkThreads = 2;//N
     threads.WorldThreads = 2;//N
 }
+ExploringConfig::ExploringConfig()
+: Gravametric(5),
+  Magnetometric(3),
+  Ladar(6),
+  Radar(6),
+  Unrated(8),
+  Complex(4),
+  maxAnomalies(10) // Default value
+{}
 
 bool EVEServerConfig::ProcessEveServer( const TiXmlElement* ele )
 {
