@@ -60,6 +60,7 @@ MapService::MapService() :
     this->Add("GetCurrentSovData", &MapService::GetCurrentSovData);
     // custom call for displaying all items in system
     this->Add ("GetCurrentEntities", &MapService::GetCurrentEntities);
+    this->Add("GetSystemAnomalies", &MapService::GetSystemAnomalies);
 }
 
 PyResult MapService::GetCurrentEntities(PyCallArgs &call)
@@ -370,5 +371,47 @@ PyResult MapService::GetStuckSystems(PyCallArgs &call)
     res = tuple0;
 
     return res;
+}
+
+PyResult MapService::GetSystemAnomalies(PyCallArgs& call)
+{
+    SystemManager* sysMgr = call.client->GetSystemManager();
+    if (!sysMgr) {
+        _log(SERVICE__ERROR, "GetSystemAnomalies called with no system manager.");
+        return new PyList();
+    }
+
+    AnomalyMgr* anomMgr = sysMgr->GetAnomalyMgr();
+    if (!anomMgr) {
+        _log(SERVICE__ERROR, "GetSystemAnomalies called with no anomaly manager.");
+        return new PyList();
+    }
+
+    PyList* anomalyList = new PyList();
+
+    for (auto& entry : anomMgr->m_anomByItemID) {
+        const CosmicSignature& sig = entry.second;
+
+        PyDict* anomDict = new PyDict();
+        anomDict->SetItemString("sigID", new PyString(sig.sigID));
+        anomDict->SetItemString("sigItemID", new PyInt(sig.sigItemID));
+        anomDict->SetItemString("dungeonType", new PyInt(sig.dungeonType));
+        anomDict->SetItemString("sigName", new PyString(sig.sigName));
+        anomDict->SetItemString("systemID", new PyInt(sig.systemID));
+        anomDict->SetItemString("sigTypeID", new PyInt(sig.sigTypeID));
+        anomDict->SetItemString("sigGroupID", new PyInt(sig.sigGroupID));
+        anomDict->SetItemString("scanGroupID", new PyInt(sig.scanGroupID));
+        anomDict->SetItemString("scanAttributeID", new PyInt(sig.scanAttributeID));
+        anomDict->SetItemString("sigStrength", new PyFloat(sig.sigStrength));
+        PyTuple* posTuple = new PyTuple(3);
+        posTuple->SetItem(0, new PyFloat(sig.position.x));
+        posTuple->SetItem(1, new PyFloat(sig.position.y));
+        posTuple->SetItem(2, new PyFloat(sig.position.z));
+        anomDict->SetItemString("position", posTuple);
+
+        anomalyList->AddItem(anomDict);
+    }
+
+    return anomalyList;
 }
 
