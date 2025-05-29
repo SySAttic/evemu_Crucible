@@ -31,10 +31,15 @@
 #include "eve-server.h"
 #include "utils/XMLParserEx.h"
 
-// Add this struct at file scope so it can be referenced in the class below
 struct ExploringConfig {
-    uint8 maxAnomalies; // public by default in struct
-    // You can add more exploring-related config settings here as needed
+    int8 Gravametric;
+    int8 Magnetometric;
+    int8 Ladar;
+    int8 Radar;
+    int8 Unrated;
+    int8 Complex;
+    uint8 maxAnomalies;  
+    ExploringConfig();   
 };
 
 /**
