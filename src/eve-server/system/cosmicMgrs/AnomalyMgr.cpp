@@ -65,6 +65,8 @@ m_Radar(0),
 m_Unrated(0),
 m_Complex(0),
 m_maxSigs(0),
+if (sConfig.exploring.maxAnomalies > 0)
+        m_maxAnoms = sConfig.exploring.maxAnomalies;
 m_initalized(false)
 {
     m_sigBySigID.clear();
@@ -189,6 +191,8 @@ void AnomalyMgr::Process() {
             m_firstSpawn = false;
         }
     }
+        if (m_anomByItemID.size() < m_maxAnoms)
+        CreateAnomaly();
     //TODO: Implement checking for expired anomalies
     /*if (m_spawnTimer.Check(false)) {
         // Check for expired anomalies and delete them
@@ -276,28 +280,45 @@ void AnomalyMgr::GetAnomalyList(std::vector<CosmicSignature>& sig) {
 
 void AnomalyMgr::CreateAnomaly(int8 typeID)
 {
-    // compile data for new system anomaly.
+    // --- 1. Enforce maximum anomaly count for this system
+    if (m_anomByItemID.size() >= m_maxAnoms) {
+        _log(COSMIC_MGR__TRACE, "Max anomalies reached (%u) for %s(%u), aborting spawn.", m_maxAnoms, m_system->GetName(), m_system->GetID());
+        return;
+    }
+
+    // --- 2. If typeID is 0, randomly pick an eligible type for this region/faction
+    int8 chosenTypeID = typeID;
+    if (typeID == 0) {
+        uint32 regionID = m_system->GetRegionID();
+        uint32 factionID = sDataMgr.GetRegionRatFaction(regionID);
+        std::vector<uint8> possibleTypes = sDunDataMgr.GetAnomalyTypesForFaction(factionID);
+
+        if (!possibleTypes.empty()) {
+            chosenTypeID = possibleTypes[MakeRandomInt(0, possibleTypes.size() - 1)];
+        } else {
+            // fallback: combat anomaly
+            chosenTypeID = Dungeon::Type::Anomaly;
+        }
+    }
+
+    // --- 3. Compile data for new system anomaly
     CosmicSignature sig = CosmicSignature();
-        sig.systemID = m_system->GetID();
-        sig.sigID = sEntityList.GetAnomalyID();
-        // *Mgr will determine name, itemID and sigStrength.
-        sig.sigItemID = 0;
-        sig.sigName = "Test Name Here";
-        //default to 1/80
-        sig.sigStrength = 0.0125;
-        // default to rogue drones
-        sig.ownerID = factionRogueDrones;
+    sig.systemID = m_system->GetID();
+    sig.sigID = sEntityList.GetAnomalyID();
+    // *Mgr will determine name, itemID and sigStrength.
+    sig.sigItemID = 0;
+    sig.sigName = "Test Name Here";
+    //default to 1/80
+    sig.sigStrength = 0.0125;
+    // default to rogue drones
+    sig.ownerID = factionRogueDrones;
     if (sConfig.debug.AnomalyFaction) {
         sig.ownerID = sConfig.debug.AnomalyFaction;
     } else if (MakeRandomFloat() > 0.1) { // 10% chance to be rogue drones
         sig.ownerID = sDataMgr.GetRegionRatFaction(m_system->GetRegionID());
     }
 
-    // there are some regions that dont have rat factions....what do we do in that case??
-    //if (sig.ownerID == 0)
-    //    return;     // make error here?
-
-    sig.dungeonType = typeID;
+    sig.dungeonType = chosenTypeID;
 
     if (sig.dungeonType == 0) {
         _log(COSMIC_MGR__ERROR, "Dungeon Type returned 0 for %s in %s(%u)", \
