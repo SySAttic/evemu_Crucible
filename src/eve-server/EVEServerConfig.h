@@ -29,8 +29,13 @@
 #define __EVE_SERVER_CONFIG__H__INCL__
 
 #include "eve-server.h"
-
 #include "utils/XMLParserEx.h"
+
+// Add this struct at file scope so it can be referenced in the class below
+struct ExploringConfig {
+    uint8 maxAnomalies; // public by default in struct
+    // You can add more exploring-related config settings here as needed
+};
 
 /**
  * @brief Class which parses and stores eve-server configuration.
@@ -43,7 +48,7 @@ class EVEServerConfig
 {
 public:
     EVEServerConfig();
-    ~EVEServerConfig()                                  { /* do nothing here */}
+    ~EVEServerConfig()                                  { /* do nothing here */ }
 
     // From <server>
     struct {
@@ -89,28 +94,17 @@ public:
 
     // From <rates>
     struct {
-        // Decay timer for item deletion (garbage collection)
         uint8 WorldDecay;
         uint8 WebUpdate;
-        // min amount of tax accepted by corp.  an amount less than this will not be processed, resulting in no tax for the concerned payment.
         uint32 TaxAmount;
-        // min amount to be taxed.  received amounts less than this will not be taxed.
         uint32 TaxedAmount;
-        /// Modifier for npc bounties automatically awarded for shooting down npc enemies.
         float npcBountyMultiply;
-        /// Modifier for damage from NPCs
         float damageRate;
-        /// Modifier for damage from missiles
         float missileDamage;
-        /// Modifier for missile flightTime
         float missileTime;
-        /// Modifier for missile rate of fire
         float missileRoF;
-        /// Modifier for damage from PC turrets
         float turretDamage;
-        /// Modifier for turret rate of fire
         float turretRoF;
-        // Decay timer for wreck deletion (garbage collection)
         float NPCDecay;
         uint8 DropItem;
         float DropMoney;
@@ -118,15 +112,11 @@ public:
         float RepairCost;
         float ShipRepairModifier;
         float ModuleRepairModifier;
-        /// Modifier for security rating changes. Changes how fast it goes up/down based on actions
         double secRate;
-        /// Startup Cost to create a corporation.
         uint32 corpCost;
-        /// Startup Cost to create an alliance.
         uint32 allyCost;
         uint32 medalAwardCost;
         uint32 medalCreateCost;
-        // Crit chance
         float PlayerCritChance;
         float NpcCritChance;
         float SentryCritChance;
@@ -164,9 +154,7 @@ public:
 
     // From <account>
     struct {
-        /// Role to assign to auto created account; set to 0 to disable auto account creation.
         int64 autoAccountRole;
-        /// A message shown to every client on login (if enabled in <World><LoginMsg>).
         std::string loginMessage;
     } account;
 
@@ -174,17 +162,11 @@ public:
     struct {
         bool allow3edChar;
         uint8 statMultiplier;
-        /// Starting corp ID for new characters
         uint32 startCorporation;
-        /// Delay for terminating a character in seconds
         uint32 terminationDelay;
-        /// Starting station ID for new characters
         uint32 startStation;
-        /// Money balance of new created characters.
         double startBalance;
-        /// Aura balance of new created characters.   -allan 01/10/14
         double startAurBalance;
-        /// Starting security rating for new characters.
         double startSecRating;
     } character;
 
@@ -215,37 +197,25 @@ public:
         bool autoReconnect;
         uint dbTimeout;
         uint8 pingTime;
-        /// A port at which the database server listens.
         uint16 port;
-        /// Hostname of database server.
         std::string host;
-        /// Name of database account to use.
         std::string username;
-        /// Password for the database account.
         std::string password;
-        /// A database to be used by server.
         std::string db;
     } database;
 
     // From <files>
     struct {
-        /// A directory in which the log files are stored
         std::string logDir;
-        /// A log configuration file.
         std::string logSettings;
-        /// A directory at which the cache files should be stored.
         std::string cacheDir;
-        // used as the base directory for the image server
         std::string imageDir;
     } files;
 
     // From <net>
     struct {
-        /// Port at which the server should listen.
         uint16 port;
-        /// Port at which the imageServer should listen.
         uint16 imageServerPort;
-        /// the imageServer for char images. should be the evemu server external ip/host
         std::string imageServer;
     } net;
 
@@ -273,14 +243,7 @@ public:
     } cosmic;
 
     // From exploring
-    struct {
-        int8 Gravametric;
-        int8 Magnetometric;
-        int8 Ladar;
-        int8 Radar;
-        int8 Unrated;
-        int8 Complex;
-    } exploring;
+    ExploringConfig exploring;
 
     // From <standings>
     struct {
@@ -332,7 +295,7 @@ public:
         bool StackTrace;
         bool BubbleTrack;
         bool SpawnTest;
-        bool IsTestServer;    // to distinguish between live production server or experimental testing server
+        bool IsTestServer;
         bool UseProfiling;
         bool UseShipTracking;
         bool DeleteTrackingCans;
@@ -342,30 +305,30 @@ public:
     } debug;
 
 protected:
-    bool ProcessEveServer( const TiXmlElement* ele );
-    bool ProcessServer( const TiXmlElement* ele );
-    bool ProcessWorld( const TiXmlElement* ele );
-    bool ProcessRates( const TiXmlElement* ele );
-    bool ProcessMarket( const TiXmlElement* ele );
-    bool ProcessAccount( const TiXmlElement* ele );
-    bool ProcessCharacter( const TiXmlElement* ele );
-    bool ProcessNPC( const TiXmlElement* ele );
-    bool ProcessDatabase( const TiXmlElement* ele );
-    bool ProcessFiles( const TiXmlElement* ele );
-    bool ProcessNet( const TiXmlElement* ele );
-    bool ProcessThreads( const TiXmlElement* ele );
-    bool ProcessCosmic( const TiXmlElement* ele );
-    bool ProcessExploring( const TiXmlElement* ele );
-    bool ProcessStandings( const TiXmlElement* ele );
-    bool ProcessChat( const TiXmlElement* ele );
-    bool ProcessCrime( const TiXmlElement* ele );
-    bool ProcessBPTimes( const TiXmlElement* ele );
-    bool ProcessTesting( const TiXmlElement* ele );
-    bool ProcessDebug( const TiXmlElement* ele );
+    bool ProcessEveServer(const TiXmlElement* ele);
+    bool ProcessServer(const TiXmlElement* ele);
+    bool ProcessWorld(const TiXmlElement* ele);
+    bool ProcessRates(const TiXmlElement* ele);
+    bool ProcessMarket(const TiXmlElement* ele);
+    bool ProcessAccount(const TiXmlElement* ele);
+    bool ProcessCharacter(const TiXmlElement* ele);
+    bool ProcessNPC(const TiXmlElement* ele);
+    bool ProcessDatabase(const TiXmlElement* ele);
+    bool ProcessFiles(const TiXmlElement* ele);
+    bool ProcessNet(const TiXmlElement* ele);
+    bool ProcessThreads(const TiXmlElement* ele);
+    bool ProcessCosmic(const TiXmlElement* ele);
+    bool ProcessExploring(const TiXmlElement* ele);
+    bool ProcessStandings(const TiXmlElement* ele);
+    bool ProcessChat(const TiXmlElement* ele);
+    bool ProcessCrime(const TiXmlElement* ele);
+    bool ProcessBPTimes(const TiXmlElement* ele);
+    bool ProcessTesting(const TiXmlElement* ele);
+    bool ProcessDebug(const TiXmlElement* ele);
 };
 
 /// A macro for easier access to the singleton.
 #define sConfig \
-    ( EVEServerConfig::get() )
+    (EVEServerConfig::get())
 
 #endif /* !__EVE_SERVER_CONFIG__H__INCL__ */
