@@ -157,6 +157,7 @@ public:
     DBRowDescriptor*    CreateHeader();
 
     void                AddOutpost(StationData &stData);
+    std::vector<uint8> GetAnomalyTypesForFaction(uint32 factionID);
 
 protected:
     void                Populate();
